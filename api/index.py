@@ -1,6 +1,5 @@
 from http.server import BaseHTTPRequestHandler
 import json
-from ClassicUPS import UPSConnection
 import os
 
 class handler(BaseHTTPRequestHandler):
