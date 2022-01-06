@@ -117,7 +117,7 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "application/json")
         self.send_header("Access-Control-Allow-Origin",
-                         "https://flow.inv.tech/")
+                         "*")
         self.end_headers()
         self.wfile.write(
             json.dumps(processing_result).encode()
