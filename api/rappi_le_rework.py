@@ -38,7 +38,10 @@ class RappiReworkApi(Utilities):
                 for row in range(len(rows)):
                     result = self.check_if_store_exist(rows[row][0])
                     if len(result) == 1:
-                        rows[row][2] = 'Sent to Rework'
+                        try:
+                            rows[row][2] = 'Sent to Rework'
+                        except IndexError:
+                            rows[row].append('Sent to Rework')
                         self.update_rework_row(
                             result[0]['id'],
                             batch_name,
@@ -47,7 +50,10 @@ class RappiReworkApi(Utilities):
                             'New'
                         )
                     else:
-                        rows[row][2] = 'Not Found'
+                        try:
+                            rows[row][2] = 'Not Found'
+                        except IndexError:
+                            rows[row].append('Not Found')
                 rows.insert(0, true_header_row)
                 update_sheet = self.update_sheet(sheet_id, "'"+tab_name+"'!A:O", rows)
                 if update_sheet:
@@ -58,6 +64,9 @@ class RappiReworkApi(Utilities):
                 has_permission = False
             elif err.resp.status == 403:
                 has_permission = False
+        except:
+            sheet_exists = False
+            has_permission = False
         return {
             "valid_link": valid_link,
             "has_permission": has_permission,
