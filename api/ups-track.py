@@ -1,4 +1,4 @@
-from .ClassicUPS import UPSConnection
+from ClassicUPS import UPSConnection
 
 
 ups = UPSConnection('ADAC6AB1040D9A52',
@@ -10,7 +10,7 @@ tracking = ups.tracking_info('1Z12345E0291980793')
 print(tracking.delivered)
 print(tracking.in_transit)
 print(tracking.shipment_activities)
-
+print(tracking)
 # from http.server import BaseHTTPRequestHandler
 # from urllib import parse
 # class handler(BaseHTTPRequestHandler):
