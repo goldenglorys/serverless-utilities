@@ -11,5 +11,5 @@ class handler(BaseHTTPRequestHandler):
                     "DATABASE": os.getenv("DATABASE_URL"),
                     "CREDS_JSON_STR": os.getenv("CREDS_JSON_STR")
                 }
-        self.wfile.write(message.encode())
+        self.wfile.write(message)
         return
