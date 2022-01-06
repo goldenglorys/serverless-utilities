@@ -8,9 +8,6 @@ from googleapiclient import discovery
 import psycopg2
 import psycopg2.extras
 
-from dotenv import load_dotenv
-
-load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 CREDS_JSON_STR = os.getenv("CREDS_JSON_STR")
