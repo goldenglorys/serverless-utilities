@@ -1,15 +1,17 @@
 from http.server import BaseHTTPRequestHandler
-import json
+from urllib import parse
 import os
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
+        s = self.path
+        dic = dict(parse.parse_qsl(parse.urlsplit(s).query))
         self.send_response(200)
         self.send_header('Content-type','text/plain')
         self.end_headers()
-        message = {
-                    "DATABASE": os.getenv("DATABASE_URL"),
-                    "CREDS_JSON_STR": os.getenv("CREDS_JSON_STR")
-                }
-        self.wfile.write(message)
+        if "name" in dic:
+            message = "Hello, " + dic["name"] + "!"
+        else:
+            message = "Hello, stranger!"
+        self.wfile.write(message.encode())
         return
