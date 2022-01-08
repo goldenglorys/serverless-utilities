@@ -1,4 +1,4 @@
-from .utilities import Utilities
+from utilities import Utilities
 from http.server import BaseHTTPRequestHandler
 import json
 import googleapiclient
@@ -38,6 +38,7 @@ class RappiReworkApi(Utilities):
                 for row in range(len(rows)):
                     result = self.check_if_store_exist(rows[row][0])
                     if len(result) == 1:
+                        print(result)
                         try:
                             rows[row][2] = 'Sent to Rework'
                         except IndexError:
@@ -64,7 +65,9 @@ class RappiReworkApi(Utilities):
                 has_permission = False
             elif err.resp.status == 403:
                 has_permission = False
-        except:
+        except Exception as err:
+            print(err)
+
             sheet_exists = False
             has_permission = False
         return {
@@ -92,6 +95,7 @@ class RappiReworkApi(Utilities):
 
 
     def update_rework_row(self, id, rework_batch, rework_reason, rework_flag, rework_status):
+        print(id)
         sql = f"""
             UPDATE rappi.le_upload
                 SET
@@ -122,3 +126,8 @@ class handler(BaseHTTPRequestHandler):
         self.wfile.write(
             json.dumps(processing_result).encode()
         )
+
+d = RappiReworkApi()
+result = d.process_sheet('https://docs.google.com/spreadsheets/d/193Im4Ny4_abEMMBDfI3RatDLJVOiyo25ITcrEd7szg8/edit#gid=0', 'Sheet1', 'Batch Name')
+
+print(result)
