@@ -18,8 +18,7 @@ class TrackAPI():
             PASSWORD,
             debug=True
         )
-        tracking_result = ups.tracking_info(tracking_id)
-        return tracking_result
+        return ups.tracking_info(tracking_id)
 
 
 class handler(BaseHTTPRequestHandler):

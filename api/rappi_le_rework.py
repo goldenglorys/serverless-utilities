@@ -25,10 +25,7 @@ class RappiReworkApi(Utilities):
                 "tabs":[el["properties"]["title"] for el in data['sheets']]
             }
             tab_exists = any(ele==tab_name for ele in summary_meta_data['tabs'])
-            sheet_data = self.get_sheet(
-                sheet_id,
-               "'"+tab_name+"'!A:O"
-            )
+            sheet_data = self.get_sheet(sheet_id, f"'{tab_name}'!A:O")
             header_row = [x.strip() for x in sheet_data["values"][0]]
             true_header_row = ['Store ID', 'Rework Reason', 'Status']
             if header_row == true_header_row:
@@ -56,14 +53,14 @@ class RappiReworkApi(Utilities):
                         except IndexError:
                             rows[row].append('Not Found')
                 rows.insert(0, true_header_row)
-                update_sheet = self.update_sheet(sheet_id, "'"+tab_name+"'!A:O", rows)
+                update_sheet = self.update_sheet(sheet_id, f"'{tab_name}'!A:O", rows)
                 if update_sheet:
                     import_reworks = True
         except googleapiclient.errors.HttpError as err:
-            if err.resp.status == 404:
-                sheet_exists = False
+            if err.resp.status == 403:
                 has_permission = False
-            elif err.resp.status == 403:
+            elif err.resp.status == 404:
+                sheet_exists = False
                 has_permission = False
         except Exception as err:
             print(err)
@@ -81,7 +78,7 @@ class RappiReworkApi(Utilities):
 
 
     def read_sheet(self, sheet_id, tab_name):
-        sheet_data = self.get_sheet(sheet_id,"'"+tab_name+"'!A:O")
+        sheet_data = self.get_sheet(sheet_id, f"'{tab_name}'!A:O")
         return sheet_data['values'][1:]
 
 
@@ -90,8 +87,7 @@ class RappiReworkApi(Utilities):
             SELECT id, client_store_id FROM rappi.le_upload 
             WHERE client_store_id = '{store_id}'
         """
-        db_result = self.run_simple_sql_query(sql)
-        return db_result
+        return self.run_simple_sql_query(sql)
 
 
     def update_rework_row(self, id, rework_batch, rework_reason, rework_flag, rework_status):

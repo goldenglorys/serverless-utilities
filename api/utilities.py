@@ -25,10 +25,9 @@ class Utilities:
             "https://www.googleapis.com/auth/drive.file",
             "https://www.googleapis.com/auth/drive",
         ]
-        credentials = ServiceAccountCredentials.from_json_keyfile_dict(
+        return ServiceAccountCredentials.from_json_keyfile_dict(
             json.loads(str(CREDS_JSON_STR)), scope
         )
-        return credentials
 
     def get_sheet_meta_data(self, sheet_id):
         credentials = self.get_credentials()
@@ -37,13 +36,11 @@ class Utilities:
         request = service.spreadsheets().get(
             spreadsheetId=spreadsheet_id
         )
-        response = request.execute()
-        return response
+        return request.execute()
 
     def get_drive(self):
         credentials = self.get_credentials()
-        drive = discovery.build("drive", "v3", credentials=credentials)
-        return drive
+        return discovery.build("drive", "v3", credentials=credentials)
 
     def get_sheet(self, sheet_id, _range):
         credentials = self.get_credentials()
@@ -53,8 +50,7 @@ class Utilities:
             spreadsheetId=spreadsheet_id, 
             range=_range,
         )
-        response = request.execute()
-        return response
+        return request.execute()
 
     def get_sheet_with_formula(self, sheet_id, _range):
         credentials = self.get_credentials()
@@ -65,8 +61,7 @@ class Utilities:
             range=_range,
             valueRenderOption="FORMULA"
         )
-        response = request.execute()
-        return response
+        return request.execute()
 
     def update_sheet(self, sheet_id, _range, values):
         credentials = self.get_credentials()
@@ -80,8 +75,7 @@ class Utilities:
                 'majorDimension' : 'ROWS'
             }
         )
-        response = request.execute()
-        return response
+        return request.execute()
 
     def get_db_conn(self):
         return psycopg2.connect(DATABASE_URL)
@@ -119,5 +113,5 @@ class Utilities:
 
     def find_user_id_by_name(self, name):
         match = [el for el in self.users if el["name"] == name]
-        return match[0] if len(match)>0 else None
+        return match[0] if match else None
 
